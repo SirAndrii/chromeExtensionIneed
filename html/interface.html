@@ -1,20 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Options</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Options</h1>
-<form>
-    <label for="stopwords">Stopwords:</label>
-    <input type="text" id="stopwords" name="stopwords"><br><br>
-    <label for="highlight-color">Highlight color:</label>
-    <input type="color" id="highlight-color" name="highlight-color"><br><br>
-    <label for="background-color">Background color:</label>
-    <input type="color" id="background-color" name="background-color"><br><br>
-    <input type="submit" id="save-button" value="Save" >
-</form>
+<header><h1>Indeed Extension</h1></header>
+<main>
+    <form>
+        <div>
+            <label for="stop-words">Stopwords:</label>
+            <textarea id="stop-words" name="stop-words" rows="3"></textarea>
+        </div>
+        <div>
+            <label for="highlight-color">Highlight color:</label>
+            <input type="color" id="highlight-color" name="highlight-color">
+        </div>
+        <div>
+            <label for="background-color">Background color:</label>
+            <input type="color" id="background-color" name="background-color">
+        </div>
+        <button type="submit" id="save-button"> Save</button>
+    </form>
+</main>
+<footer>
+
+</footer>
 <script src="/scripts/options.js"></script>
 </body>
 </html>
