@@ -1,16 +1,9 @@
-import {getChromeStorageData, saveChromeStorageData} from "./chomeStorage";
-
 const targetElementClass = 'jobsearch-JobComponent';
-
 const skeletonClass = 'jobsearch-ViewJobSkeleton'
-
 
 let stopWords = [];
 let colors = {};
-
-(async function () {
-    const result = await getChromeStorageData(['stopWords', 'colors']);
-
+chrome.storage.sync.get(['stopWords', 'colors'], (result) => {
     if (Object.keys(result).length === 0) {
         const initialData = {
             stopWords: ['secret', 'clearance', 'software'],
@@ -20,23 +13,19 @@ let colors = {};
             }
         };
 
-        saveChromeStorageData(initialData, () => {
+        chrome.storage.sync.set(initialData, () => {
             console.log('Initial data has been set to storage.');
-        })
+        });
     } else {
         stopWords = result.stopWords;
         colors = result.colors;
     }
-})();
+});
 
 const highlightAll = () => {
     const jobDescription = document.getElementsByClassName(targetElementClass)[0];
 
-    const stopWords = items.stopWords;
-    const colors = items.colors;
-
     stopWords.forEach((word) => highlighter(word, jobDescription, colors))
-
 };
 
 //todo use regex and do search for multi words in one walk.

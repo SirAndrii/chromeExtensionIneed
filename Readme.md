@@ -20,6 +20,7 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - ~~improve UI~~
 - Optimize algorithm for searching stopwords in one walk
 - rewrite with TS
+- after clicking save - refresh page
 
 ## Installation
 - Clone or download this repository
