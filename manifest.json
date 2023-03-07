@@ -18,5 +18,11 @@
       "js": ["scripts/content.js"],
       "run_at": "document_idle"
     }
+  ],
+  "action": {
+    "default_popup": "html/interface.html"
+  },
+  "permissions": [
+    "storage"
   ]
 }

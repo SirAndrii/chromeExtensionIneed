@@ -2,19 +2,38 @@ const targetElementClass = 'jobsearch-JobComponent';
 const mountedComponentID = 'jobsearch-ViewjobPaneWrapper'
 const skeletonClass = 'jobsearch-ViewJobSkeleton'
 
-const stopWords = ['secret', 'clearance', 'software']
-//look to the
-// `document.querySelector` may return null if the selector doesn't match anything.
 
+chrome.storage.sync.get(['stopWords', 'colors'], (result) => {
+    // Check if the storage is empty
+    if (Object.keys(result).length === 0) {
+
+        const initialData = {
+            stopWords: ['secret', 'clearance', 'software'],
+            colors: {
+                highlightColor: 'yellow',
+                backgroundColor: 'grey'
+            }
+        };
+
+        chrome.storage.sync.set(initialData, () => {
+            console.log('Initial data has been set to storage.');
+        })
+    }
+})
 const highlightAll = () => {
-
     const jobDescription = document.getElementsByClassName(targetElementClass)[0];
-    console.log({jobDescription, instance: jobDescription instanceof Node});
-    stopWords.forEach((word) => highlighter(word, jobDescription))
+    chrome.storage.sync.get(['stopWords', 'colors'], (items) => {
+            const stopWords = items.stopWords;
+            const colors = items.colors;
+
+            stopWords.forEach((word) => highlighter(word, jobDescription, colors))
+        });
+
+
 };
 
 //todo use regex and do search for multi words in one walk.
-function highlighter(word, elementTree) {
+function highlighter(word, elementTree, colors) {
     if (!(elementTree instanceof Node)) {
         return;
     }
@@ -39,15 +58,15 @@ function highlighter(word, elementTree) {
     if (containWord) {
 
         // Replace the special symbols with a HTML span element
-        elementTree.innerHTML = elementTree.innerHTML.replace(/@@@(.*?)@@@/g, '<span style="background-color:yellow">$1</span>');
+        elementTree.innerHTML = elementTree.innerHTML.replace(/@@@(.*?)@@@/g, `<span style="background-color: ${colors.highlightColor}">$1</span>`);
         // Change the background of the first element
-        elementTree.style.backgroundColor = 'grey';
+        elementTree.style.backgroundColor = colors.backgroundColor;
     }
 }
 
 
 const observer = new MutationObserver((mutations) => {
-    for( let mutation of mutations) {
+    for (let mutation of mutations) {
         if (mutation.type === 'childList') {
             console.log('Changed');
             // check if the job title class were changed. Indeed changes this class often
