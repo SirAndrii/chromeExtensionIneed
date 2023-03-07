@@ -1,5 +1,4 @@
-# Indeed job description stop Words Highlighter
-A Chrome extension that highlights stop words in job descriptions.
+# A Chrome extension that highlights stop words in Indeed's job descriptions.
 
 ## Motivation
 The extension was created as a way to help non-US citizens who are not eligible for secret clearance to quickly identify job descriptions that require it. By highlighting specified stop words, users can easily skim job postings and avoid wasting time on positions that they are not eligible for.
