@@ -1,12 +1,17 @@
+import {getChromeStorageData, saveChromeStorageData} from "./chomeStorage";
+
 const targetElementClass = 'jobsearch-JobComponent';
-const mountedComponentID = 'jobsearch-ViewjobPaneWrapper'
+
 const skeletonClass = 'jobsearch-ViewJobSkeleton'
 
 
-chrome.storage.sync.get(['stopWords', 'colors'], (result) => {
-    // Check if the storage is empty
-    if (Object.keys(result).length === 0) {
+let stopWords = [];
+let colors = {};
 
+(async function () {
+    const result = await getChromeStorageData(['stopWords', 'colors']);
+
+    if (Object.keys(result).length === 0) {
         const initialData = {
             stopWords: ['secret', 'clearance', 'software'],
             colors: {
@@ -15,20 +20,22 @@ chrome.storage.sync.get(['stopWords', 'colors'], (result) => {
             }
         };
 
-        chrome.storage.sync.set(initialData, () => {
+        saveChromeStorageData(initialData, () => {
             console.log('Initial data has been set to storage.');
         })
+    } else {
+        stopWords = result.stopWords;
+        colors = result.colors;
     }
-})
+})();
+
 const highlightAll = () => {
     const jobDescription = document.getElementsByClassName(targetElementClass)[0];
-    chrome.storage.sync.get(['stopWords', 'colors'], (items) => {
-            const stopWords = items.stopWords;
-            const colors = items.colors;
 
-            stopWords.forEach((word) => highlighter(word, jobDescription, colors))
-        });
+    const stopWords = items.stopWords;
+    const colors = items.colors;
 
+    stopWords.forEach((word) => highlighter(word, jobDescription, colors))
 
 };
 
@@ -37,7 +44,6 @@ function highlighter(word, elementTree, colors) {
     if (!(elementTree instanceof Node)) {
         return;
     }
-    console.log('START SEARCHING')
 
     const walker = document.createTreeWalker(elementTree, NodeFilter.SHOW_TEXT);
     let node;
@@ -49,7 +55,7 @@ function highlighter(word, elementTree, colors) {
         if (node.textContent.match(regex)) {
             // marker for change parent element
             containWord = true;
-// Wrap the matched word with special symbols because Node doesn't have innerText
+            // Wrap the matched word with special symbols because Node doesn't have innerText
             node.textContent = node.textContent.replace(regex, `@@@${word}@@@`);
         }
     }
@@ -68,17 +74,9 @@ function highlighter(word, elementTree, colors) {
 const observer = new MutationObserver((mutations) => {
     for (let mutation of mutations) {
         if (mutation.type === 'childList') {
-            console.log('Changed');
-            // check if the job title class were changed. Indeed changes this class often
-            // const jobDescription = document.querySelector(mountedComponentClass);
-            // if (jobDescription) {
-            //     observer.disconnect();
-            //     console.log('Job description found!');
-            //     highlightAll();
-            // }
             mutation.removedNodes.forEach(removedNode => {
                 if (removedNode.nodeType === Node.ELEMENT_NODE && removedNode.classList.contains(skeletonClass)) {
-                    console.log('Skeleton removed! Start processing');
+                    console.log('Skeleton removed!');
                     highlightAll();
                 }
             });

@@ -16,8 +16,10 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - Can be easily customized to include additional stop words
 
 ## Todo
-- Add userinterface for adding and editing stop words
+- ~~Add userinterface for adding and editing stop words~~
+- ~~improve UI~~
 - Optimize algorithm for searching stopwords in one walk
+- rewrite with TS
 
 ## Installation
 - Clone or download this repository
