@@ -16,6 +16,9 @@
       "run_at": "document_idle"
     }
   ],
+  "background": {
+    "service_worker": "scripts/service_worker.js"
+  },
   "action": {
     "default_popup": "html/interface.html"
   },

@@ -4,23 +4,9 @@ const skeletonClass = 'jobsearch-ViewJobSkeleton'
 let stopWords = [];
 let colors = {};
 chrome.storage.sync.get(['stopWords', 'colors'], (result) => {
-    if (Object.keys(result).length === 0) {
-        //save initial options on first run
-        const initialData = {
-            stopWords: ['secret', 'clearance', 'software'],
-            colors: {
-                highlightColor: 'yellow',
-                backgroundColor: 'grey'
-            }
-        }
-
-        chrome.storage.sync.set(initialData, () => {
-            console.log('Initial data has been set to storage.')
-        })
-    } else {
+    //initial options are in service_worker.js
         stopWords = result.stopWords
         colors = result.colors
-    }
 });
 
 const highlightAll = () => {
