@@ -18,7 +18,8 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - ~~Add userinterface for adding and editing stop words~~
 - ~~improve UI~~
 - Optimize algorithm for searching stopwords in one walk
-- rewrite with TS
+- use webpack/vite for supporting modularity + TS 
+
 - after clicking save - refresh page
 
 ## Installation
