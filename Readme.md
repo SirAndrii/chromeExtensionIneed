@@ -27,7 +27,7 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - Open Chrome and navigate to chrome://extensions
 - Enable "Developer mode"
 - Click on "Load unpacked"
-- Select the downloaded repository
+- Select the folder extension from downloaded repository
 
 ## Usage
 - Navigate to a job listing page on Indeed.com
