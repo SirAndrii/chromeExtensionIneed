@@ -1,0 +1,13 @@
+{
+  "name": "webPack for my extension",
+  "version": "0.2",
+  "main": "src/content.js",
+  "private": true,
+  "devDependencies": {
+    "babel-loader": "^9.1.2",
+    "copy-webpack-plugin": "^11.0.0",
+    "html-loader": "^4.2.0",
+    "webpack": "^5.76.2",
+    "webpack-cli": "^5.0.1"
+  }
+}

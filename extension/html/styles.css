@@ -1,0 +1,54 @@
+body {
+    font: normal 15px "Helvetica Neue";
+    color: #fff;
+    background: #3AAFAB;
+    width: 300px;
+    margin: 20px;
+}
+h1 {
+    text-align: center;
+}
+
+form {
+    display:flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+label
+{
+    font-weight: 300;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    width: 33%;
+}
+
+input,textarea {
+    flex-grow:1;
+    border: none;
+}
+
+button {
+    width:200px;
+    align-self:center;
+    padding: 8px 16px;
+    border: none;
+    background: #333;
+    color: #f2f2f2;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    border-radius: 2px;
+}
+
+
+
+

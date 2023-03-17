@@ -1,0 +1,1 @@
+chrome.runtime.onInstalled.addListener((()=>{chrome.storage.sync.get(["stopWords","colors"],(o=>{if(0===Object.keys(o).length){const o={stopWords:["secret","clearance","citizen"],colors:{highlightColor:"#f3d381",backgroundColor:"#b0b0b0"}};chrome.storage.sync.set(o,(()=>{console.log("Initial data has been set to storage.")}))}}))}));
