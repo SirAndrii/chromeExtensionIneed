@@ -1,5 +1,6 @@
 const targetElementClass = 'jobsearch-JobComponent';
 const skeletonClass = 'jobsearch-ViewJobSkeleton'
+const testId = 'viewJob-skeleton'
 
 let stopWords = [];
 let colors = {};
@@ -23,6 +24,24 @@ const highlightAll = () => {
         scrollableElement.scrollTop = highlightedElement.offsetTop - 260
     }
 };
+
+const removeByTitle =()=>{
+    const regex = /\b(senior|lead|architect|java|\.net|sr\.|manager|\.net)\b/gi;
+    const titles = [...document.querySelectorAll('h2.jobTitle')]
+    if (titles.length===0) return
+
+    const titlesRemove = titles.filter( title => regex.test(title.textContent))
+    if (titles.length===0) return
+
+    titlesRemove.forEach((title) => {
+        // Find the nearest parent li element and remove it from the DOM
+        const listItem = title.closest('li');
+        if (listItem) {
+            listItem.remove();
+        }
+    });
+
+}
 
 //todo use regex and do search for multi words in one walk.
 function highlighter(word, elementTree, colors) {
@@ -58,9 +77,11 @@ const observer = new MutationObserver((mutations) => {
     for (let mutation of mutations) {
         if (mutation.type === 'childList') {
             mutation.removedNodes.forEach(removedNode => {
-                if (removedNode.nodeType === Node.ELEMENT_NODE && removedNode.classList.contains(skeletonClass)) {
+                console.log(removedNode)
+                if (removedNode.nodeType === Node.ELEMENT_NODE && (removedNode.classList.contains(skeletonClass) || removedNode.getAttribute('data-testid') === testId)) {
                     console.log('Skeleton removed!')
                     highlightAll()
+                    removeByTitle()
                 }
             });
         }
