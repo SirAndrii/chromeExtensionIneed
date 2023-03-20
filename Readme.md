@@ -18,8 +18,8 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - ~~Add userinterface for adding and editing stop words~~
 - ~~improve UI~~
 - Optimize algorithm for searching stopwords in one walk
-- use webpack/vite for supporting modularity + TS 
-
+- ~~use webpack/vite for supporting modularity + TS~~
+- add highlighting algorythm
 - after clicking save - refresh page
 
 ## Installation
@@ -27,7 +27,7 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - Open Chrome and navigate to chrome://extensions
 - Enable "Developer mode"
 - Click on "Load unpacked"
-- Select the folder extension from downloaded repository
+- Select the folder 'extension' from downloaded repository
 
 ## Usage
 - Navigate to a job listing page on Indeed.com
