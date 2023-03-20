@@ -1,5 +1,6 @@
 import {INITIAL, KEYS} from "./constants";
 import {Colors, StorageData} from "./types";
+import removeByTitle from "./utils/removeByTitle";
 //import * as events from "events";
 
 const {HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS} = KEYS
@@ -47,24 +48,6 @@ const highlightAll = () => {
 
 };
 
-const removeByTitle =()=>{
-    const removeWordsStr = data[REMOVE_WORDS].map(word=> RegExp.escape(word)).join('|')
-    const regex = new RegExp(`\\b(${removeWordsStr})\\b`, 'gi');
-    const titles: Element[] = Array.from(document.querySelectorAll('h2.jobTitle'))
-    if (titles.length===0) return
-
-    const titlesRemove = titles.filter( title => regex.test(title.textContent!))
-    if (titlesRemove.length===0) return
-
-    titlesRemove.forEach((title) => {
-        // Find the nearest parent li element and remove it from the DOM
-        const listItem = title.closest('li');
-        if (listItem) {
-            listItem.remove();
-        }
-    });
-
-}
 
 //todo use regex and do search for multi words in one walk.
 function highlighter(word: string, elementTree: HTMLElement, colors: Colors) {
@@ -104,7 +87,7 @@ const observer = new MutationObserver((mutations) => {
                 if (removedNode.nodeType === Node.ELEMENT_NODE && ((removedNode as Element).classList.contains(data[SELECTORS].SKELETON_CLASS) || (removedNode as Element).getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
                     console.log('Skeleton removed!')
                     highlightAll()
-                    removeByTitle()
+                    removeByTitle(data[REMOVE_WORDS])
                 }
             });
         }
