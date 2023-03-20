@@ -19,7 +19,7 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - ~~improve UI~~
 - Optimize algorithm for searching stopwords in one walk
 - ~~use webpack/vite for supporting modularity + TS~~
-- add highlighting algorythm
+- Add highlighting algorythm
 - after clicking save - refresh page
 
 ## Installation
