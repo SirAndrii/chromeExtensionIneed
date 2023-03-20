@@ -10,12 +10,18 @@ h1 {
 }
 
 form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-columns {
     display:flex;
     flex-direction: column;
     gap: 15px;
 }
 
-form > div {
+.input-columns>div {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -38,6 +44,7 @@ input,textarea {
 }
 
 button {
+    margin: auto;
     width:200px;
     align-self:center;
     padding: 8px 16px;
@@ -47,6 +54,18 @@ button {
     text-transform: uppercase;
     letter-spacing: .09em;
     border-radius: 2px;
+    cursor:pointer;
+}
+
+.options {
+    margin: 10px 0;
+}
+button.selectors-toggle {
+    display: flex;
+    width: 100%;
+    background: none;
+    align-items: center;
+    justify-content: center;
 }
 
 

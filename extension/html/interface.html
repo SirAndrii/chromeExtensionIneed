@@ -9,18 +9,52 @@
 <header><h1>Indeed Extension</h1></header>
 <main>
     <form>
-        <div>
-            <label for="stop-words">Stopwords:</label>
-            <textarea id="stop-words" name="stop-words" rows="3"></textarea>
+        <div class="options">
+            <div class="input-columns">
+                <div>
+                    <label for="stop-words">Highlight words:</label>
+                    <textarea id="stop-words" name="stop-words" rows="3"></textarea>
+                </div>
+                <div>
+                    <label for="remove-words">Remove by words:</label>
+                    <textarea id="remove-words" name="remove-words" rows="3"></textarea>
+                </div>
+                <div>
+                    <label for="highlight-color">Highlight color:</label>
+                    <input type="color" id="highlight-color" name="highlight-color">
+                </div>
+                <div>
+                    <label for="background-color">Background color:</label>
+                    <input type="color" id="background-color" name="background-color">
+                </div>
+            </div>
         </div>
-        <div>
-            <label for="highlight-color">Highlight color:</label>
-            <input type="color" id="highlight-color" name="highlight-color">
+        <div class="options">
+            <button type="button" class="selectors-toggle">
+                <span class="selectors-toggle-text">Show selectors</span>
+                <svg class="selectors-toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                     fill="currentColor" width="24" height="24">
+                    <path d="M12.71,16.29l5-5a1,1,0,0,0-1.41-1.41L12,13.59l-4.29-4.3a1,1,0,0,0-1.41,1.41l5,5a1,1,0,0,0,1.41,0Z"/>
+                    <path d="M12.71,16.29l-5-5a1,1,0,0,1,1.41-1.41L12,13.59l4.29-4.3a1,1,0,0,1,1.41,1.41l-5,5a1,1,0,0,1-1.41,0Z"/>
+                </svg>
+            </button>
+
+            <div class="input-columns selectors-content" style="display: none;">
+                <div>
+                    <label for="scrollable-container">Scrollable container:</label>
+                    <input type="text" id="scrollable-container" name="scrollable-container">
+                </div>
+                <div>
+                    <label for="skeleton-class">Skeleton class:</label>
+                    <input type="text" id="skeleton-class" name="skeleton-class">
+                </div>
+                <div>
+                    <label for="remove-test-id">Remove test ID:</label>
+                    <input type="text" id="remove-test-id" name="remove-test-id">
+                </div>
+            </div>
         </div>
-        <div>
-            <label for="background-color">Background color:</label>
-            <input type="color" id="background-color" name="background-color">
-        </div>
+
         <button type="submit" id="save-button"> Save</button>
     </form>
 </main>
