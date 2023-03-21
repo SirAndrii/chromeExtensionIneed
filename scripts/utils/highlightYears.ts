@@ -1,4 +1,4 @@
-export default function highlightYears(text: string, num: number): string {
+export default function highlightYears(text: string, num: number, color: string = 'red'): string {
     const regex = /\d+\+? years/gi;
     const match: RegExpMatchArray | null = text.match(regex)
 
@@ -7,7 +7,7 @@ export default function highlightYears(text: string, num: number): string {
 
         if (matchNum.length > 0) {
             matchNum.forEach(match => {
-                text = text.replace(match, `<span style="background: red">${match}</span>`)
+                text = text.replace(match, `<span style="background: ${color}">${match}</span>`)
             })
         }
     }
