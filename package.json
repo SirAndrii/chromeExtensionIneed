@@ -1,7 +1,7 @@
 {
   "name": "webPack_for_my_Indeed_extension",
   "version": "0.2",
-  "main": "src/content.js",
+  "main": "script/content.js",
   "private": true,
   "devDependencies": {
     "@types/chrome": "^0.0.224",

@@ -1,8 +1,8 @@
-import backslashSpec from "./escapeRegex";
+import {backslashSpec} from "./backslashRegex";
 
 const removeByTitle = (words: string[]) => {
     const removeWordsStr = backslashSpec (words)
-    const regex = new RegExp(`\\b(${removeWordsStr})\\b`, 'gi');
+    const regex = new RegExp(`\\b${removeWordsStr}\\b`, 'gi');
     //todo store selector in storage
     const titles: Element[] = Array.from(document.querySelectorAll('h2.jobTitle'))
     if (titles.length === 0) return
