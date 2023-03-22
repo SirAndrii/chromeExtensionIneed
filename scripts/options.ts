@@ -10,7 +10,7 @@ const backgroundColorInput = document.getElementById('background-color') as HTML
 
 const scrollableContainerInput = document.getElementById('scrollable-container') as HTMLInputElement;
 const skeletonClassInput = document.getElementById('skeleton-class') as HTMLInputElement
-const removeTestIdInput = document.getElementById('remove-test-id') as HTMLInputElement
+const removeTestIdInput = document.getElementById('remove-tests-id') as HTMLInputElement
 
 
 const saveButton = document.getElementById('save-button')!;
@@ -39,7 +39,6 @@ saveButton.addEventListener('click', function () {
             REMOVE_TEST_ID: removeTestIdInput.value
         }
     }
-
 
     chrome.storage.sync.set(dataToStorage, () => {
         alert('Options saved')

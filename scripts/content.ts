@@ -1,14 +1,11 @@
 import {INITIAL, KEYS} from "./constants";
-import {Colors, StorageData} from "./types";
+import {StorageData} from "./types";
 import removeByTitle from "./utils/removeByTitle";
-//import * as events from "events";
+import highlightWords from "./utils/highlightWords";
+import highlightYears from "./utils/highlightYears";
+
 
 const {HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS} = KEYS
-
-// const targetElementClass = 'jobsearch-JobComponent';
-// const skeletonClass = 'jobsearch-ViewJobSkeleton'
-// const testId = 'viewJob-skeleton'
-
 const data: StorageData = {...INITIAL}
 chrome.storage.sync.get([HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS], (result) => {
     if (chrome.runtime.lastError) {
@@ -28,15 +25,33 @@ const highlightAll = () => {
     const jobDescription = document.getElementsByClassName(data[SELECTORS].SCROLLABLE_CONTAINER)[0] as HTMLElement|null
     if (!jobDescription) return
 
-    if (Array.isArray(data[HIGHLIGHT_WORDS])) {
-        data[HIGHLIGHT_WORDS]?.forEach((word) => highlighter(word, jobDescription, data[COLORS]))
-    }
-    //scroll to first highlighted word
+    // Get the parent node of the root element
+    const walker = document.createTreeWalker(jobDescription, NodeFilter.SHOW_TEXT)
+    let node;
 
-    //todo add to consts
-    const scrollableElement: HTMLElement | null = jobDescription.querySelector('.jobsearch-JobComponent-embeddedBody');
+    while (node = walker.nextNode()) {
+        if (node?.textContent) {
+            node.textContent = highlightWords( node.textContent, data[HIGHLIGHT_WORDS],  data[COLORS].highlightColor)
+            node.textContent = highlightYears( node.textContent, 3, data[COLORS].highlightColor)
+        }
+    }
+    //If found special markup (data-highlight) for highlighted text then convert HTML entities to tags
+    const hasHighlight = /data-highlight="true"/.test(jobDescription.innerHTML);
+
+    if (hasHighlight){
+        jobDescription.innerHTML = jobDescription.innerHTML
+            .replace(/(@@@lt;|@@@gt;)/g, (match) => match==='@@@lt;' ? '<' : '>')
+            //.replace(/(\&lt;|\&gt;)/g, (match) => match==='\&lt;' ? '<' : '>')
+        jobDescription.style.backgroundColor =  data[COLORS].backgroundColor
+
+        scrollFirstHighlight(jobDescription)
+    }
+}
+const scrollFirstHighlight = (rootElement: HTMLElement)=> {
+    //todo add to constants, test if we can do it without scrollableElement
+    const scrollableElement: HTMLElement | null = rootElement.querySelector('.jobsearch-JobComponent-embeddedBody');
     if (scrollableElement) {
-        const highlightedElement: HTMLElement | null = scrollableElement.querySelector(`span[style*="background-color: ${data[COLORS].highlightColor}"]`);
+        const highlightedElement: HTMLElement | null = document.querySelector('[data-highlight="true"]');//scrollableElement.querySelector(`span[style*="background-color: ${data[COLORS].highlightColor}"]`);
 
         if ( highlightedElement) {
             scrollableElement.scrollTop = highlightedElement.offsetTop - 260
@@ -44,40 +59,7 @@ const highlightAll = () => {
     }else{
         console.error(`check selector '.jobsearch-JobComponent-embeddedBody'`)
     }
-
-
-};
-
-
-//todo use regex and do search for multi words in one walk.
-function highlighter(word: string, elementTree: HTMLElement, colors: Colors) {
-    if (!(elementTree instanceof Node)) {
-        return
-    }
-
-    const walker = document.createTreeWalker(elementTree, NodeFilter.SHOW_TEXT)
-    let node
-    let containWord = false
-    const regex = new RegExp(word, 'gi')
-
-    while (node = walker.nextNode()) {
-        // Check if the node's text content contains the word to highlight
-        if (node?.textContent && node.textContent.match(regex)) {
-            // marker for change parent element
-            containWord = true
-            // Wrap the matched word with special symbols because Node doesn't have innerText
-            node.textContent = node.textContent.replace(regex, `@@@${word}@@@`)
-        }
-    }
-
-    if (containWord) {
-        // Replace the special symbols with a HTML span element
-        elementTree.innerHTML = elementTree.innerHTML.replace(/@@@(.*?)@@@/g, `<span style="background-color: ${colors.highlightColor}">$1</span>`)
-        // Change the background of the root element
-        elementTree.style.backgroundColor = colors.backgroundColor
-    }
 }
-
 
 const observer = new MutationObserver((mutations) => {
     for (let mutation of mutations) {
@@ -95,5 +77,3 @@ const observer = new MutationObserver((mutations) => {
 });
 
 observer.observe(document, {childList: true, subtree: true});
-
-
