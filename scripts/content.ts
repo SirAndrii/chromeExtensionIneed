@@ -1,17 +1,11 @@
 import {INITIAL, KEYS} from "./constants";
 import {StorageData} from "./types";
 import removeByTitle from "./utils/removeByTitle";
-
 import highlightWords from "./utils/highlightWords";
 import highlightYears from "./utils/highlightYears";
-//import * as events from "events";
+
 
 const {HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS} = KEYS
-
-// const targetElementClass = 'jobsearch-JobComponent';
-// const skeletonClass = 'jobsearch-ViewJobSkeleton'
-// const testId = 'viewJob-skeleton'
-
 const data: StorageData = {...INITIAL}
 chrome.storage.sync.get([HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS], (result) => {
     if (chrome.runtime.lastError) {
@@ -83,5 +77,3 @@ const observer = new MutationObserver((mutations) => {
 });
 
 observer.observe(document, {childList: true, subtree: true});
-
-

@@ -1,4 +1,5 @@
 import {KEYS} from "./constants";
+
 const {HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS} = KEYS
 
 export interface StorageData {

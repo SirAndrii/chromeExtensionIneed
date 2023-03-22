@@ -40,7 +40,6 @@ saveButton.addEventListener('click', function () {
         }
     }
 
-
     chrome.storage.sync.set(dataToStorage, () => {
         alert('Options saved')
     })
