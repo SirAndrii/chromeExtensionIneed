@@ -2,6 +2,7 @@ import {StorageData} from "./types";
 
 export const KEYS = {
     HIGHLIGHT_WORDS: 'stopWords',
+    HIGHLIGHT_YEARS: 'stopYears',
     REMOVE_WORDS: 'removeWords',
     COLORS: 'colors',
     SELECTORS: 'selectors'
@@ -14,6 +15,10 @@ export const INITIAL: StorageData = {
         SCROLLABLE_CONTAINER: 'jobsearch-JobComponent',
         SKELETON_CLASS: 'jobsearch-ViewJobSkeleton',
         REMOVE_TEST_ID: 'viewJob-skeleton',
+    },
+    [KEYS.HIGHLIGHT_YEARS]: {
+        show: true,
+        years: '3'
     },
     [KEYS.COLORS]: {
         highlightColor: '#f3d381',

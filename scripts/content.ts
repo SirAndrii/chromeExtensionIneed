@@ -5,9 +5,9 @@ import highlightWords from "./utils/highlightWords";
 import highlightYears from "./utils/highlightYears";
 
 
-const {HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS} = KEYS
+const {HIGHLIGHT_WORDS, HIGHLIGHT_YEARS, REMOVE_WORDS, COLORS, SELECTORS} = KEYS
 const data: StorageData = {...INITIAL}
-chrome.storage.sync.get([HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS], (result) => {
+chrome.storage.sync.get( Object(KEYS).keys, (result) => {
     if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError)
     } else {
@@ -15,6 +15,7 @@ chrome.storage.sync.get([HIGHLIGHT_WORDS, REMOVE_WORDS, COLORS, SELECTORS], (res
         console.log(result)
         //initial options are in service_worker.ts
         data[HIGHLIGHT_WORDS] = result[HIGHLIGHT_WORDS]
+        data[HIGHLIGHT_YEARS] = result[HIGHLIGHT_YEARS]
         data[REMOVE_WORDS] = result[REMOVE_WORDS]
         data[COLORS] = result[COLORS]
         data[SELECTORS] = result[SELECTORS]
@@ -32,7 +33,10 @@ const highlightAll = () => {
     while (node = walker.nextNode()) {
         if (node?.textContent) {
             node.textContent = highlightWords( node.textContent, data[HIGHLIGHT_WORDS],  data[COLORS].highlightColor)
-            node.textContent = highlightYears( node.textContent, 3, data[COLORS].highlightColor)
+
+            if(data[HIGHLIGHT_YEARS].show){
+                node.textContent = highlightYears( node.textContent, Number(data[HIGHLIGHT_YEARS].years), data[COLORS].highlightColor)
+            }
         }
     }
     //If found special markup (data-highlight) for highlighted text then convert HTML entities to tags

@@ -20,6 +20,11 @@
                     <textarea id="remove-words" name="remove-words" rows="3"></textarea>
                 </div>
                 <div>
+                    <label for="highlight-years">Highlight by years:</label>
+                    <input type="checkbox" id="highlight-years" name="highlight-years" checked="true">
+                    <input type="number" id="highlight-years-input" name="highlight-years-input">
+                </div>
+                <div>
                     <label for="highlight-color">Highlight color:</label>
                     <input type="color" id="highlight-color" name="highlight-color">
                 </div>
@@ -64,19 +69,3 @@
 <script src="../scripts/options.js"></script>
 </body>
 </html>
-
-export default function highlightYears(text: string, num: number, color: string = 'red'): string {
-const regex = /\d+\+? years/gi;
-const match: RegExpMatchArray | null = text.match(regex)
-
-if (match) {
-const matchNum = [...new Set(match)].filter(item => parseInt(item) >= num)
-
-if (matchNum.length > 0) {
-matchNum.forEach(match => {
-text = text.replace(match, `<span style="background: ${color}">${match}</span>`)
-})
-}
-}
-
-return text;
