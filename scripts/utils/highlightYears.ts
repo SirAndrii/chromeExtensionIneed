@@ -7,7 +7,7 @@ export default function highlightYears(text: string, num: number, color: string 
 
         if (matchNum.length > 0) {
             matchNum.forEach(match => {
-                text = text.replace(match, `<span style="background: ${color}">${match}</span>`)
+                text = text.replace(match, `@@@lt;span data-highlight="true" style="background: ${color}"@@@gt;${match}@@@lt;/span@@@gt;`)
             })
         }
     }
