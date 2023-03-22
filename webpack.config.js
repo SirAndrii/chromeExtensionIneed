@@ -2,6 +2,10 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+    mode: 'production',
+    optimization: {
+        minimize: false,
+    },
     entry: {
         content:"./scripts/content.ts",
         service_worker:"./scripts/service_worker.ts",

@@ -1,1 +1,181 @@
-(()=>{"use strict";const e={HIGHLIGHT_WORDS:"stopWords",REMOVE_WORDS:"removeWords",COLORS:"colors",SELECTORS:"selectors"},t={[e.SELECTORS]:{SCROLLABLE_CONTAINER:"jobsearch-JobComponent",SKELETON_CLASS:"jobsearch-ViewJobSkeleton",REMOVE_TEST_ID:"viewJob-skeleton"},[e.COLORS]:{highlightColor:"#f3d381",backgroundColor:"#b0b0b0"},[e.REMOVE_WORDS]:["senior","lead","architect","java",".net","sr.","manager"],[e.HIGHLIGHT_WORDS]:["secret","clearance","citizen"]};function o(e){return`(${e.map((e=>e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"))).join("|")})`}const r=e=>{const t=o(e),r=new RegExp(`\\b${t}\\b`,"gi"),n=Array.from(document.querySelectorAll("h2.jobTitle"));if(0===n.length)return;const c=n.filter((e=>r.test(e.textContent)));0!==c.length&&c.forEach((e=>{const t=e.closest("li");t&&t.remove()}))};function n(e,t,r="red"){const n=new RegExp(`${o(t)}`,"gi"),c=e.match(n);if(c){const t=[...new Set(c)];t.length>0&&t.forEach((t=>{e=e.replace(t,`@@@lt;span data-highlight="true" style="background: ${r}"@@@gt;${t}@@@lt;/span@@@gt;`)}))}return e}function c(e,t,o="red"){const r=e.match(/\d+\+? years/gi);if(r){const n=[...new Set(r)].filter((e=>parseInt(e)>=t));n.length>0&&n.forEach((t=>{e=e.replace(t,`@@@lt;span data-highlight="true" style="background: ${o}"@@@gt;${t}@@@lt;/span@@@gt;`)}))}return e}const{HIGHLIGHT_WORDS:s,REMOVE_WORDS:l,COLORS:a,SELECTORS:i}=e,h=Object.assign({},t);chrome.storage.sync.get([s,l,a,i],(e=>{chrome.runtime.lastError?console.error(chrome.runtime.lastError):(console.log(e),h[s]=e[s],h[l]=e[l],h[a]=e[a],h[i]=e[i])}));const g=()=>{const e=document.getElementsByClassName(h[i].SCROLLABLE_CONTAINER)[0];if(!e)return;const t=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let o;for(;o=t.nextNode();)(null==o?void 0:o.textContent)&&(o.textContent=n(o.textContent,h[s],h[a].highlightColor),o.textContent=c(o.textContent,3,h[a].highlightColor));/data-highlight="true"/.test(e.innerHTML)&&(alert("hasHighlight"),e.innerHTML=e.innerHTML.replace(/(@@@lt;|@@@gt;)/g,(e=>"@@@lt;"===e?"<":">")),e.style.backgroundColor=h[a].backgroundColor,d(e))},d=e=>{const t=e.querySelector(".jobsearch-JobComponent-embeddedBody");if(t){const e=document.querySelector('[data-highlight="true"]');e&&(t.scrollTop=e.offsetTop-260)}else console.error("check selector '.jobsearch-JobComponent-embeddedBody'")};new MutationObserver((e=>{for(let t of e)"childList"===t.type&&t.removedNodes.forEach((e=>{e.nodeType!==Node.ELEMENT_NODE||!e.classList.contains(h[i].SKELETON_CLASS)&&e.getAttribute("data-testid")!==h[i].REMOVE_TEST_ID||(console.log("Skeleton removed!"),g(),r(h[l]))}))})).observe(document,{childList:!0,subtree:!0})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+var __webpack_exports__ = {};
+
+;// CONCATENATED MODULE: ./scripts/constants.ts
+const KEYS = {
+    HIGHLIGHT_WORDS: 'stopWords',
+    HIGHLIGHT_YEARS: 'stopYears',
+    REMOVE_WORDS: 'removeWords',
+    COLORS: 'colors',
+    SELECTORS: 'selectors'
+};
+const INITIAL = {
+    [KEYS.SELECTORS]: {
+        SCROLLABLE_CONTAINER: 'jobsearch-JobComponent',
+        SKELETON_CLASS: 'jobsearch-ViewJobSkeleton',
+        REMOVE_TEST_ID: 'viewJob-skeleton',
+    },
+    [KEYS.HIGHLIGHT_YEARS]: {
+        show: true,
+        years: '3'
+    },
+    [KEYS.COLORS]: {
+        highlightColor: '#f3d381',
+        backgroundColor: '#b0b0b0'
+    },
+    [KEYS.REMOVE_WORDS]: ['senior', 'lead', 'architect', 'java', '\.net', 'sr\.', 'manager'],
+    [KEYS.HIGHLIGHT_WORDS]: ['secret', 'clearance', 'citizen']
+};
+
+;// CONCATENATED MODULE: ./scripts/utils/backslashRegex.ts
+function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+/**
+ * backslash any special characters in a string and join them in regex OR pattern.
+ *
+ * @param {string[]} words - An array of words to escape and concatenate.
+ * @returns {string}  - (word1|\.word2|word3).
+ */
+function backslashSpec(words) {
+    return `(${words.map(word => escapeRegExp(word)).join('|')})`;
+}
+
+;// CONCATENATED MODULE: ./scripts/utils/removeByTitle.ts
+
+const removeByTitle = (words) => {
+    const removeWordsStr = backslashSpec(words);
+    const regex = new RegExp(`\\b${removeWordsStr}\\b`, 'gi');
+    //todo store selector in storage
+    const titles = Array.from(document.querySelectorAll('h2.jobTitle'));
+    if (titles.length === 0)
+        return;
+    const titlesRemove = titles.filter(title => regex.test(title.textContent));
+    if (titlesRemove.length === 0)
+        return;
+    titlesRemove.forEach((title) => {
+        // Find the nearest parent li element and remove it from the DOM
+        const listItem = title.closest('li');
+        if (listItem) {
+            listItem.remove();
+        }
+    });
+};
+/* harmony default export */ const utils_removeByTitle = (removeByTitle);
+
+;// CONCATENATED MODULE: ./scripts/utils/highlightWords.ts
+
+/**
+
+ Highlight specific words in a string with wrap them in HTML entity that represents span tags.
+ @param {string} text - inputted text to be processed.
+ @param {string[]} words - words to be highlighted .
+ @param {string} [color='red'] - The background color.
+ @returns {string} - example, some &lt;span style="..."&gt;word&lt.
+ */
+function highlightWords(text, words, color = 'red') {
+    const regex = new RegExp(`${backslashSpec(words)}`, 'gi');
+    const match = text.match(regex);
+    if (match) {
+        const matchWords = [...new Set(match)];
+        if (matchWords.length > 0) {
+            matchWords.forEach(match => {
+                text = text.replace(match, `@@@lt;span data-highlight="true" style="background: ${color}"@@@gt;${match}@@@lt;/span@@@gt;`);
+            });
+        }
+    }
+    return text;
+}
+
+;// CONCATENATED MODULE: ./scripts/utils/highlightYears.ts
+function highlightYears(text, num, color = 'red') {
+    const regex = /\d+\+? years/gi;
+    const match = text.match(regex);
+    if (match) {
+        const matchNum = [...new Set(match)].filter(item => parseInt(item) >= num);
+        if (matchNum.length > 0) {
+            matchNum.forEach(match => {
+                text = text.replace(match, `@@@lt;span data-highlight="true" style="background: ${color}"@@@gt;${match}@@@lt;/span@@@gt;`);
+            });
+        }
+    }
+    return text;
+}
+
+;// CONCATENATED MODULE: ./scripts/content.ts
+
+
+
+
+const { HIGHLIGHT_WORDS, HIGHLIGHT_YEARS, REMOVE_WORDS, COLORS, SELECTORS } = KEYS;
+const data = Object.assign({}, INITIAL);
+chrome.storage.sync.get(Object(KEYS).keys, (result) => {
+    if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+    }
+    else {
+        //todo add type
+        console.log(result);
+        //initial options are in service_worker.ts
+        data[HIGHLIGHT_WORDS] = result[HIGHLIGHT_WORDS];
+        data[HIGHLIGHT_YEARS] = result[HIGHLIGHT_YEARS];
+        data[REMOVE_WORDS] = result[REMOVE_WORDS];
+        data[COLORS] = result[COLORS];
+        data[SELECTORS] = result[SELECTORS];
+    }
+});
+const highlightAll = () => {
+    const jobDescription = document.getElementsByClassName(data[SELECTORS].SCROLLABLE_CONTAINER)[0];
+    if (!jobDescription)
+        return;
+    // Get the parent node of the root element
+    const walker = document.createTreeWalker(jobDescription, NodeFilter.SHOW_TEXT);
+    let node;
+    while (node = walker.nextNode()) {
+        if (node === null || node === void 0 ? void 0 : node.textContent) {
+            node.textContent = highlightWords(node.textContent, data[HIGHLIGHT_WORDS], data[COLORS].highlightColor);
+            if (data[HIGHLIGHT_YEARS].show) {
+                node.textContent = highlightYears(node.textContent, Number(data[HIGHLIGHT_YEARS].years), data[COLORS].highlightColor);
+            }
+        }
+    }
+    //If found special markup (data-highlight) for highlighted text then convert HTML entities to tags
+    const hasHighlight = /data-highlight="true"/.test(jobDescription.innerHTML);
+    if (hasHighlight) {
+        jobDescription.innerHTML = jobDescription.innerHTML
+            .replace(/(@@@lt;|@@@gt;)/g, (match) => match === '@@@lt;' ? '<' : '>');
+        //.replace(/(\&lt;|\&gt;)/g, (match) => match==='\&lt;' ? '<' : '>')
+        jobDescription.style.backgroundColor = data[COLORS].backgroundColor;
+        scrollFirstHighlight(jobDescription);
+    }
+};
+const scrollFirstHighlight = (rootElement) => {
+    //todo add to constants, test if we can do it without scrollableElement
+    const scrollableElement = rootElement.querySelector('.jobsearch-JobComponent-embeddedBody');
+    if (scrollableElement) {
+        const highlightedElement = document.querySelector('[data-highlight="true"]'); //scrollableElement.querySelector(`span[style*="background-color: ${data[COLORS].highlightColor}"]`);
+        if (highlightedElement) {
+            scrollableElement.scrollTop = highlightedElement.offsetTop - 260;
+        }
+    }
+    else {
+        console.error(`check selector '.jobsearch-JobComponent-embeddedBody'`);
+    }
+};
+const observer = new MutationObserver((mutations) => {
+    for (let mutation of mutations) {
+        if (mutation.type === 'childList') {
+            utils_removeByTitle(data[REMOVE_WORDS]);
+            mutation.removedNodes.forEach(removedNode => {
+                if (removedNode.nodeType === Node.ELEMENT_NODE && (removedNode.classList.contains(data[SELECTORS].SKELETON_CLASS) || removedNode.getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
+                    highlightAll();
+                }
+            });
+        }
+    }
+});
+observer.observe(document, { childList: true, subtree: true });
+
+/******/ })()
+;
