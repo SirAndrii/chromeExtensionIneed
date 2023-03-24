@@ -1,18 +1,43 @@
-name: Build extension and Deploy to websotre
+name: Indeed Highlighter ~ Run tests, Build extension, and Deploy to webstore
+
 on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
+
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+
       - name: Install dependencies
         run: npm install
+
+      - name: Run all tests
+        run: npm run test
+
       - name: Build extension
         run: npx webpack
+
+      - name: Install webstore cli
+        run: npm install -g chrome-webstore-upload-cli
+      #todo uncomment when extension will be reviewed
+      #- name: Upload to chrome WebStore
+      #  run: |
+      #    chrome-webstore-upload upload \
+      #      --source extension/extension.zip \
+      #      --extension-id ${{ secrets.APP_ID }} \
+      #      --client-id ${{ secrets.CI_GOOGLE_CLIENT_ID }} \
+      #      --client-secret ${{ secrets.CI_GOOGLE_CLIENT_SECRET }} \
+      #      --refresh-token ${{ secrets.CI_GOOGLE_REFRESH_TOKEN }}
+      

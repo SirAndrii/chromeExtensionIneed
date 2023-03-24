@@ -12,7 +12,7 @@ const KEYS = {
 };
 const INITIAL = {
     [KEYS.SELECTORS]: {
-        SCROLLABLE_CONTAINER: 'jobsearch-JobComponent',
+        SCROLLABLE_CONTAINER: 'jobsearch-embeddedBody',
         SKELETON_CLASS: 'jobsearch-ViewJobSkeleton',
         REMOVE_TEST_ID: 'viewJob-skeleton',
     },
@@ -115,9 +115,6 @@ chrome.storage.sync.get(Object(KEYS).keys, (result) => {
         console.error(chrome.runtime.lastError);
     }
     else {
-        //todo add type
-        console.log(result);
-        //initial options are in service_worker.ts
         data[HIGHLIGHT_WORDS] = result[HIGHLIGHT_WORDS];
         data[HIGHLIGHT_YEARS] = result[HIGHLIGHT_YEARS];
         data[REMOVE_WORDS] = result[REMOVE_WORDS];
@@ -127,8 +124,10 @@ chrome.storage.sync.get(Object(KEYS).keys, (result) => {
 });
 const highlightAll = () => {
     const jobDescription = document.getElementsByClassName(data[SELECTORS].SCROLLABLE_CONTAINER)[0];
-    if (!jobDescription)
+    if (!jobDescription) {
+        console.error(`Selector can't find the proper div with a class: ${data[SELECTORS].SCROLLABLE_CONTAINER}. Please update selectors in the extension interface. Troubleshooting: https://github.com/SirAndrii/chromeExtensionIneed#troubleshooting `);
         return;
+    }
     // Get the parent node of the root element
     const walker = document.createTreeWalker(jobDescription, NodeFilter.SHOW_TEXT);
     let node;
@@ -151,25 +150,20 @@ const highlightAll = () => {
     }
 };
 const scrollFirstHighlight = (rootElement) => {
-    //todo add to constants, test if we can do it without scrollableElement
-    const scrollableElement = rootElement.querySelector('.jobsearch-JobComponent-embeddedBody');
-    if (scrollableElement) {
-        const highlightedElement = document.querySelector('[data-highlight="true"]'); //scrollableElement.querySelector(`span[style*="background-color: ${data[COLORS].highlightColor}"]`);
-        if (highlightedElement) {
-            scrollableElement.scrollTop = highlightedElement.offsetTop - 260;
-        }
-    }
-    else {
-        console.error(`check selector '.jobsearch-JobComponent-embeddedBody'`);
+    const highlightedElement = rootElement.querySelector('[data-highlight="true"]'); //scrollableElement.querySelector(`span[style*="background-color: ${data[COLORS].highlightColor}"]`);
+    if (highlightedElement) {
+        rootElement.scrollTop = highlightedElement.offsetTop - 260;
     }
 };
 const observer = new MutationObserver((mutations) => {
     for (let mutation of mutations) {
         if (mutation.type === 'childList') {
-            utils_removeByTitle(data[REMOVE_WORDS]);
             mutation.removedNodes.forEach(removedNode => {
+                console.log(removedNode);
                 if (removedNode.nodeType === Node.ELEMENT_NODE && (removedNode.classList.contains(data[SELECTORS].SKELETON_CLASS) || removedNode.getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
+                    console.log('Skeleton removed!');
                     highlightAll();
+                    utils_removeByTitle(data[REMOVE_WORDS]);
                 }
             });
         }

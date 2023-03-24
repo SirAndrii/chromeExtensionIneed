@@ -11,9 +11,6 @@ chrome.storage.sync.get( Object(KEYS).keys, (result) => {
     if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError)
     } else {
-        //todo add type
-        console.log(result)
-        //initial options are in service_worker.ts
         data[HIGHLIGHT_WORDS] = result[HIGHLIGHT_WORDS]
         data[HIGHLIGHT_YEARS] = result[HIGHLIGHT_YEARS]
         data[REMOVE_WORDS] = result[REMOVE_WORDS]
@@ -24,7 +21,10 @@ chrome.storage.sync.get( Object(KEYS).keys, (result) => {
 
 const highlightAll = () => {
     const jobDescription = document.getElementsByClassName(data[SELECTORS].SCROLLABLE_CONTAINER)[0] as HTMLElement|null
-    if (!jobDescription) return
+    if (!jobDescription) {
+        console.error(`Selector can't find the proper div with a class: ${data[SELECTORS].SCROLLABLE_CONTAINER}. Please update selectors in the extension interface. Troubleshooting: https://github.com/SirAndrii/chromeExtensionIneed#troubleshooting ` )
+        return
+       }
 
     // Get the parent node of the root element
     const walker = document.createTreeWalker(jobDescription, NodeFilter.SHOW_TEXT)
@@ -51,18 +51,12 @@ const highlightAll = () => {
         scrollFirstHighlight(jobDescription)
     }
 }
-const scrollFirstHighlight = (rootElement: HTMLElement)=> {
-    //todo add to constants, test if we can do it without scrollableElement
-    const scrollableElement: HTMLElement | null = rootElement.querySelector('.jobsearch-JobComponent-embeddedBody');
-    if (scrollableElement) {
-        const highlightedElement: HTMLElement | null = document.querySelector('[data-highlight="true"]');//scrollableElement.querySelector(`span[style*="background-color: ${data[COLORS].highlightColor}"]`);
+const scrollFirstHighlight = (rootElement: HTMLElement) => {
+     const highlightedElement: HTMLElement | null = rootElement.querySelector('[data-highlight="true"]');//scrollableElement.querySelector(`span[style*="background-color: ${data[COLORS].highlightColor}"]`);
 
         if ( highlightedElement) {
-            scrollableElement.scrollTop = highlightedElement.offsetTop - 260
+            rootElement.scrollTop = highlightedElement.offsetTop - 260
         }
-    }else{
-        console.error(`check selector '.jobsearch-JobComponent-embeddedBody'`)
-    }
 }
 
 const observer = new MutationObserver((mutations) => {

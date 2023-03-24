@@ -1,8 +1,11 @@
 {
-  "name": "webPack_for_my_Indeed_extension",
-  "version": "0.2",
+  "name": "webPack_Indeed_Highlighter",
+  "version": "0.6",
   "main": "script/content.js",
   "private": true,
+  "scripts": {
+    "test": "jest"
+  },
   "devDependencies": {
     "@types/chrome": "^0.0.224",
     "@types/jest": "^29.5.0",
@@ -14,6 +17,7 @@
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.2",
     "webpack": "^5.76.2",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^5.0.1",
+    "zip-webpack-plugin": "^4.0.1"
   }
 }
