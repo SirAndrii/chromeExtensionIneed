@@ -1,6 +1,6 @@
 {
   "name": "webPack_Indeed_Highlighter",
-  "version": "0.2",
+  "version": "0.6",
   "main": "script/content.js",
   "private": true,
   "scripts": {
