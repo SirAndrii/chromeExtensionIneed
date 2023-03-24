@@ -12,7 +12,7 @@ const KEYS = {
 };
 const INITIAL = {
     [KEYS.SELECTORS]: {
-        SCROLLABLE_CONTAINER: 'jobsearch-JobComponent',
+        SCROLLABLE_CONTAINER: 'jobsearch-embeddedBody',
         SKELETON_CLASS: 'jobsearch-ViewJobSkeleton',
         REMOVE_TEST_ID: 'viewJob-skeleton',
     },
@@ -115,9 +115,6 @@ chrome.storage.sync.get(Object(KEYS).keys, (result) => {
         console.error(chrome.runtime.lastError);
     }
     else {
-        //todo add type
-        console.log(result);
-        //initial options are in service_worker.ts
         data[HIGHLIGHT_WORDS] = result[HIGHLIGHT_WORDS];
         data[HIGHLIGHT_YEARS] = result[HIGHLIGHT_YEARS];
         data[REMOVE_WORDS] = result[REMOVE_WORDS];
@@ -128,7 +125,7 @@ chrome.storage.sync.get(Object(KEYS).keys, (result) => {
 const highlightAll = () => {
     const jobDescription = document.getElementsByClassName(data[SELECTORS].SCROLLABLE_CONTAINER)[0];
     if (!jobDescription) {
-        console.error(`Selector can't find the proper div with class: ${data[SELECTORS].SCROLLABLE_CONTAINER}. Please update selector in the extension interface. Troubleshooting: https://github.com/SirAndrii/chromeExtensionIneed#troubleshooting `);
+        console.error(`Selector can't find the proper div with a class: ${data[SELECTORS].SCROLLABLE_CONTAINER}. Please update selectors in the extension interface. Troubleshooting: https://github.com/SirAndrii/chromeExtensionIneed#troubleshooting `);
         return;
     }
     // Get the parent node of the root element
