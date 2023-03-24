@@ -67,13 +67,13 @@ const scrollFirstHighlight = (rootElement: HTMLElement)=> {
 
 const observer = new MutationObserver((mutations) => {
     for (let mutation of mutations) {
-
         if (mutation.type === 'childList') {
-            removeByTitle(data[REMOVE_WORDS])
-
             mutation.removedNodes.forEach(removedNode => {
+                console.log(removedNode)
                 if (removedNode.nodeType === Node.ELEMENT_NODE && ((removedNode as Element).classList.contains(data[SELECTORS].SKELETON_CLASS) || (removedNode as Element).getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
+                    console.log('Skeleton removed!')
                     highlightAll()
+                    removeByTitle(data[REMOVE_WORDS])
                 }
             });
         }
