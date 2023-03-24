@@ -12,7 +12,7 @@ const KEYS = {
 };
 const INITIAL = {
     [KEYS.SELECTORS]: {
-        SCROLLABLE_CONTAINER: 'jobsearch-JobComponent',
+        SCROLLABLE_CONTAINER: 'jobsearch-embeddedBody',
         SKELETON_CLASS: 'jobsearch-ViewJobSkeleton',
         REMOVE_TEST_ID: 'viewJob-skeleton',
     },
