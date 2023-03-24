@@ -1,5 +1,6 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ZipWebpackPlugin = require('zip-webpack-plugin');
 
 module.exports = {
     mode: 'production',
@@ -40,5 +41,9 @@ module.exports = {
                 { from: 'images', to: 'images' },
             ],
         }),
+
+        new ZipWebpackPlugin({
+            filename: 'extension.zip',
+        })
     ],
 };

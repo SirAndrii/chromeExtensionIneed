@@ -1,18 +1,58 @@
-name: Build extension and Deploy to websotre
+name: Indeed Highlighter ~ Run tests, Build extension, and Deploy to webstore
+
 on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
+
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
         with:
           node-version: '16.x'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+      - name: Run all tests
+        run: jest
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
       - name: Build extension
         run: npx webpack
+
+  # api usage reference:
+  # * <https://developer.chrome.com/docs/webstore/using_webstore_api/>
+  # * <https://github.com/fregante/chrome-webstore-upload/blob/main/How%20to%20generate%20Google%20API%20keys.md>
+  upload-extension:
+    name: Upload extension
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Install webstore cli
+        run: |-
+          npm install -g chrome-webstore-upload-cli
+
+      - name: Upload step
+        run: |-
+          chrome-webstore-upload upload \\
+            --source extension.zip
+            --extension-id ${{ secrets.APP_ID }} \\
+            --client-id ${{ secrets.CI_GOOGLE_CLIENT_ID }} \\
+            --client-secret ${{ secrets.CI_GOOGLE_CLIENT_SECRET }} \\
+            --refresh-token ${{ secrets.CI_GOOGLE_REFRESH_TOKEN }}

@@ -5,6 +5,7 @@
 *.iml
 
 # Ignore build output
+extension/
 node_modules/
 build/
 dist/
