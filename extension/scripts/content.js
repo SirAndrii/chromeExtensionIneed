@@ -158,10 +158,17 @@ const scrollFirstHighlight = (rootElement) => {
 const observer = new MutationObserver((mutations) => {
     for (let mutation of mutations) {
         if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach(addedNode => {
+                if (addedNode.nodeType === Node.ELEMENT_NODE && addedNode.getAttribute('aria-label') === 'pagination') {
+                    console.log('Navigation added, trigger removeByTitle!');
+                    utils_removeByTitle(data[REMOVE_WORDS]);
+                }
+            });
             mutation.removedNodes.forEach(removedNode => {
-                console.log(removedNode);
-                if (removedNode.nodeType === Node.ELEMENT_NODE && (removedNode.classList.contains(data[SELECTORS].SKELETON_CLASS) || removedNode.getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
-                    console.log('Skeleton removed!');
+                if (removedNode.nodeType === Node.ELEMENT_NODE &&
+                    (removedNode.classList.contains(data[SELECTORS].SKELETON_CLASS) ||
+                        removedNode.getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
+                    console.log('Skeleton was removed, trigger highlighter!');
                     highlightAll();
                     utils_removeByTitle(data[REMOVE_WORDS]);
                 }

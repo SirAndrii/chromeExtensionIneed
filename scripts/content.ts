@@ -58,20 +58,29 @@ const scrollFirstHighlight = (rootElement: HTMLElement) => {
             rootElement.scrollTop = highlightedElement.offsetTop - 260
         }
 }
-
 const observer = new MutationObserver((mutations) => {
     for (let mutation of mutations) {
         if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach(addedNode => {
+                if (addedNode.nodeType === Node.ELEMENT_NODE &&(addedNode as Element).getAttribute('aria-label') === 'pagination') {
+                    console.log('Navigation added, trigger removeByTitle!');
+                    removeByTitle(data[REMOVE_WORDS]);
+                }
+            });
+
             mutation.removedNodes.forEach(removedNode => {
-                console.log(removedNode)
-                if (removedNode.nodeType === Node.ELEMENT_NODE && ((removedNode as Element).classList.contains(data[SELECTORS].SKELETON_CLASS) || (removedNode as Element).getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
-                    console.log('Skeleton removed!')
-                    highlightAll()
-                    removeByTitle(data[REMOVE_WORDS])
+                if (
+                    removedNode.nodeType === Node.ELEMENT_NODE &&
+                    ((removedNode as Element).classList.contains(data[SELECTORS].SKELETON_CLASS) ||
+                        (removedNode as Element).getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)
+                ) {
+                    console.log('Skeleton was removed, trigger highlighter!');
+                    highlightAll();
+                    removeByTitle(data[REMOVE_WORDS]);
                 }
             });
         }
     }
 });
 
-observer.observe(document, {childList: true, subtree: true});
+observer.observe(document, { childList: true, subtree: true });
