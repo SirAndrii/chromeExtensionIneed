@@ -1,23 +1,15 @@
 import {INITIAL, KEYS} from "./constants";
 import {StorageData} from "./types";
+import Singelton from './storage/storage'
 import removeByTitle from "./utils/removeByTitle";
 import highlightWords from "./utils/highlightWords";
 import highlightYears from "./utils/highlightYears";
 
 
 const {HIGHLIGHT_WORDS, HIGHLIGHT_YEARS, REMOVE_WORDS, COLORS, SELECTORS} = KEYS
-const data: StorageData = {...INITIAL}
-chrome.storage.sync.get( Object(KEYS).keys, (result) => {
-    if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError)
-    } else {
-        data[HIGHLIGHT_WORDS] = result[HIGHLIGHT_WORDS]
-        data[HIGHLIGHT_YEARS] = result[HIGHLIGHT_YEARS]
-        data[REMOVE_WORDS] = result[REMOVE_WORDS]
-        data[COLORS] = result[COLORS]
-        data[SELECTORS] = result[SELECTORS]
-    }
-});
+
+
+const data: StorageData = Singelton.getData()
 
 const highlightAll = () => {
     const jobDescription = document.getElementsByClassName(data[SELECTORS].SCROLLABLE_CONTAINER)[0] as HTMLElement|null
