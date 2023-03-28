@@ -60,6 +60,7 @@ const scrollFirstHighlight = (rootElement: HTMLElement) => {
 }
 
 const observer = new MutationObserver((mutations) => {
+
     let selectorFound: Record<string, boolean> = {
         pagination: false,
         skeleton: false,
@@ -76,6 +77,7 @@ const observer = new MutationObserver((mutations) => {
                 ) {
                     selectorFound.skeleton = true
                     console.log('Skeleton was removed, trigger highlighter!');
+
                     //after update indeed's website started to manipulate with innerHTML, hotfix
                     if (!selectorFound.removed) {
                         removeByTitle(data[REMOVE_WORDS])

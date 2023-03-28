@@ -68,6 +68,16 @@ button.selectors-toggle {
     justify-content: center;
 }
 
+footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+footer a{
+    color: white;
+}
+
 
 
 

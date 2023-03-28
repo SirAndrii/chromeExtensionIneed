@@ -10,16 +10,19 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 ![Mar-07-2023 00-01-12](https://user-images.githubusercontent.com/24919819/223325200-14820074-4687-4716-b895-2fc4031a8107.gif)
 
 ## Features
-- Highlights specified stop words in job descriptions
-- Automatically starts highlighting once the page has finished loading and a skeleton loading element has been removed
-- Can be easily customized to include additional stop words
+- Highlighting specific words from a list
+- Optionable highlighting years of experience
+- Removing job listings by words in title
+- Customizable by user highlight colors 
+- Automatic scrolling to first highlighted word
+- 
 
 ## Todo
 - ~~Add userinterface for adding and editing stop words~~
 - ~~improve UI~~
 - Optimize algorithm for searching stopwords in one walk
 - ~~use webpack/vite for supporting modularity + TS~~
-- Add highlighting algorythm
+- ~~Add highlighting algorythm~~
 - after clicking save - refresh page
 
 ## Installation
