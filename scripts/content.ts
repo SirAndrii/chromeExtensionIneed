@@ -58,22 +58,16 @@ const scrollFirstHighlight = (rootElement: HTMLElement) => {
             rootElement.scrollTop = highlightedElement.offsetTop - 260
         }
 }
+
 const observer = new MutationObserver((mutations) => {
     let selectorFound: Record<string, boolean> = {
         pagination: false,
-        skeleton: false
+        skeleton: false,
+        removed: false
     };
 
     for (let mutation of mutations) {
         if (mutation.type === 'childList') {
-            mutation.addedNodes.forEach(addedNode => {
-                if (addedNode.nodeType === Node.ELEMENT_NODE &&(addedNode as Element).getAttribute('aria-label') === 'pagination') {
-                    selectorFound.pagination = true
-                    console.log('Navigation added, trigger removeByTitle!');
-                    removeByTitle(data[REMOVE_WORDS]);
-                }
-            });
-
             mutation.removedNodes.forEach(removedNode => {
                 if (
                     removedNode.nodeType === Node.ELEMENT_NODE &&
@@ -82,18 +76,16 @@ const observer = new MutationObserver((mutations) => {
                 ) {
                     selectorFound.skeleton = true
                     console.log('Skeleton was removed, trigger highlighter!');
-                    highlightAll();
+                    //after update indeed's website started to manipulate with innerHTML, hotfix
+                    if (!selectorFound.removed) {
+                        removeByTitle(data[REMOVE_WORDS])
+                        selectorFound.removed = true
+                    }
+
+                    setTimeout(() => highlightAll(), 100);
                 }
             });
         }
-    }
-
-    switch (false) {
-        case (selectorFound.pagination):
-            console.warn(`can't find pagination block to trigger removing by title`)
-        case (selectorFound.skeleton):
-            console.warn(`can't find skeleton block to trigger highlighter`)
-        default: return
     }
 
 });

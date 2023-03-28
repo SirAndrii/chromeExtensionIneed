@@ -156,21 +156,25 @@ const scrollFirstHighlight = (rootElement) => {
     }
 };
 const observer = new MutationObserver((mutations) => {
+    let selectorFound = {
+        pagination: false,
+        skeleton: false,
+        removed: false
+    };
     for (let mutation of mutations) {
         if (mutation.type === 'childList') {
-            mutation.addedNodes.forEach(addedNode => {
-                if (addedNode.nodeType === Node.ELEMENT_NODE && addedNode.getAttribute('aria-label') === 'pagination') {
-                    console.log('Navigation added, trigger removeByTitle!');
-                    utils_removeByTitle(data[REMOVE_WORDS]);
-                }
-            });
             mutation.removedNodes.forEach(removedNode => {
                 if (removedNode.nodeType === Node.ELEMENT_NODE &&
                     (removedNode.classList.contains(data[SELECTORS].SKELETON_CLASS) ||
                         removedNode.getAttribute('data-testid') === data[SELECTORS].REMOVE_TEST_ID)) {
+                    selectorFound.skeleton = true;
                     console.log('Skeleton was removed, trigger highlighter!');
-                    highlightAll();
-                    utils_removeByTitle(data[REMOVE_WORDS]);
+                    //after update indeed's website started to manipulate with innerHTML, hotfix
+                    if (!selectorFound.removed) {
+                        utils_removeByTitle(data[REMOVE_WORDS]);
+                        selectorFound.removed = true;
+                    }
+                    setTimeout(() => highlightAll(), 100);
                 }
             });
         }
