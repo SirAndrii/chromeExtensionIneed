@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Highlight stop-words on Indeed page",
-  "version": "0.62",
+  "version": "0.63",
   "description": "Helps to filter irrelevant jobs and description on Indeed's JobSearch page with highlight feature and Interface for changing settings",
   "icons": {
     "16": "images/icon-16.png",

@@ -38,6 +38,28 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 - Stop words will be highlighted in yellow
 - Highliting is triggered by unmouting skeleton component
 
+## Troubleshooting
+
+1. Missing Selector errors in the console
+2.   Open the extension settings.
+3.   Click on "Show Selectors".
+4.   Search for the selectors in the code (check for console warnings).
+5.   If the selectors are missing, replace them with the new ones and update the extension settings:
+### Scrollable Container (parent div of job description)
+You need use the browser's Developer Tools (F12) to inspect the web page structure and identify the right selectors.
+In the Developer Tools, navigate to the "Elements" tab and search (Ctrl + F) for the classes or IDs you are looking for.
+
+   It often contains "embedBody" in the className.
+   Ensure the correct className is used in the extension settings.
+### Selector for removing Skeleton element
+   Two selectors are working as logical OR: SKELETON CLASS and REMOVE TEST ID.
+   As these elements are removed after fetching data, it's hard to find them in dom tree. Try to pause execution by click pause button on the source tab of the Chrome development tools and inspect source code
+
+### Removing titles
+Note: Removing titles has not yet been implemented in the extension settings. You might want to consider adding this feature in a future update or creating a separate extension to handle title removal.
+
+### Still having issues?
+   Leave an issue on the extension's GitHub repository describing your problem in detail.
 
 ## Contributing
 If you would like to contribute to this project, feel free to open a pull request or submit an issue.
