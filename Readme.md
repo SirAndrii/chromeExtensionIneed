@@ -45,6 +45,9 @@ This Chrome extension uses a MutationObserver to watch for changes to the DOM. O
 3.   Click on "Show Selectors".
 4.   Search for the selectors in the code (check for console warnings).
 5.   If the selectors are missing, replace them with the new ones and update the extension settings:
+
+<img width="354" alt="Screenshot 2023-04-13 at 5 41 23 PM" src="https://user-images.githubusercontent.com/24919819/231889206-358be3f1-dcea-4898-8ba4-86be1ed91dd9.png">
+
 ### Scrollable Container (parent div of job description)
 You need use the browser's Developer Tools (F12) to inspect the web page structure and identify the right selectors.
 In the Developer Tools, navigate to the "Elements" tab and search (Ctrl + F) for the classes or IDs you are looking for.
