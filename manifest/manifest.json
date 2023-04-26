@@ -23,7 +23,6 @@
     "default_popup": "html/interface.html"
   },
   "permissions": [
-    "storage",
-    "activeTab"
+    "storage"
   ]
 }

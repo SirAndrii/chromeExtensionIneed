@@ -12,13 +12,13 @@ const KEYS = {
 };
 const INITIAL = {
     [KEYS.SELECTORS]: {
-        SCROLLABLE_CONTAINER: 'jobsearch-embeddedBody',
+        SCROLLABLE_CONTAINER: 'jobsearch-JobComponent-embeddedBody',
         SKELETON_CLASS: 'jobsearch-ViewJobSkeleton',
         REMOVE_TEST_ID: 'viewJob-skeleton',
     },
     [KEYS.HIGHLIGHT_YEARS]: {
         show: true,
-        years: '3'
+        years: '4'
     },
     [KEYS.COLORS]: {
         highlightColor: '#f3d381',
